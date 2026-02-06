@@ -7,10 +7,32 @@ import threading
 
 class Seeder:
     """
-    Docstring for Seeder
+    Generate cryptographic seeds from radio frequency noise using an RTL-SDR device.
+    
+    The Seeder class captures IQ samples from atmospheric radio noise across a frequency
+    range and converts them into cryptographic-quality random seeds using phase angle
+    analysis and SHA-256 hashing. Seeds are continuously refreshed in a background thread.
+    
+    Attributes:
+        running: Whether the seeder is currently active.
+        seed: The current SHA-256 seed derived from RF samples (read-only property).
     """
 
     def __init__(self, rtl_tcp_client: RTLTCPClient):
+        """
+        Initialize the Seeder with an RTL-TCP client connection.
+        
+        Sets up the seeder to generate cryptographic seeds from radio frequency samples.
+        Configures the RTL-SDR device, retrieves initial samples, and starts a background
+        thread for continuous seed refreshing.
+        
+        Args:
+            rtl_tcp_client: An RTLTCPClient instance for communicating with the RTL-TCP server.
+        
+        Raises:
+            ValueError: If connection to the RTL-TCP server fails or initial samples cannot be retrieved.
+        """
+        
         self.running: bool = False
         self.__seed: Optional[str] = None
         self.__client: RTLTCPClient = rtl_tcp_client
@@ -38,15 +60,38 @@ class Seeder:
 
     @property
     def seed(self):
+        """
+        Get the current cryptographic seed.
+        
+        Returns:
+            str: A SHA-256 hash hexdigest representing the current seed derived from RF samples.
+        """
+
         return self.__seed
     
 
     def stop(self):
+        """
+        Stop the seeder and disconnect from the RTL-TCP server.
+        
+        Halts the background thread and closes the connection to the RTL-TCP server.
+        """
+
         self.running = False
         self.__client.disconnect()
 
 
     def __get_next_freq(self) -> int:
+        """
+        Calculate the next frequency in the scanning range.
+        
+        Increments the current frequency by 1 MHz and wraps back to the minimum
+        frequency when the maximum is exceeded.
+        
+        Returns:
+            int: The next frequency in MHz to scan.
+        """
+
         self.__current_freq += 1
         
         # If it exceeds max, wrap back to min
@@ -56,6 +101,23 @@ class Seeder:
 
 
     def __samples_to_seed(self, samples: Optional[List[complex]]):
+        """
+        Convert IQ samples to a cryptographic seed using phase angle analysis.
+        
+        Processes complex IQ samples by:
+        1. Computing phase angle deltas between consecutive samples
+        2. Converting deltas to bits (1 if positive, 0 if negative)
+        3. Applying XOR whitening to balance bit distribution
+        4. Packing bits into bytes and hashing with SHA-256
+        
+        Args:
+            samples: A list of complex IQ samples from the RTL-SDR, or None.
+        
+        Returns:
+            str or None: A SHA-256 hash hexdigest if successful, the previous seed if samples
+                        are None, or None if the seeder is not running.
+        """
+
         if not self.running: 
             return None
         
@@ -125,6 +187,13 @@ class Seeder:
 
 
     def __runner(self):
+        """
+        Background thread worker for continuous seed generation.
+        
+        Continuously cycles through the frequency range, collecting samples and
+        updating the seed at the configured refresh rate. Runs until stopped.
+        """
+
         while self.running:
             
             self.__client.configure(freq_mhz=self.__get_next_freq(), gain_db=self.__gain) # configure with the shift
