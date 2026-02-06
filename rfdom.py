@@ -60,8 +60,20 @@ class RFDom:
         # Get a random float in [0.0, 1.0] and scale it to [val1, val2]
         random = self.__lcg.get_float(inclusive=True)
         return val1 + (val2 - val1) * random
+    
 
+    def randint(self, a: int, b: int) -> int:
+        self.__reseed()
 
+        val1: float = a
+        val2: float = b
+
+        if (val1 > val2): # inversion check
+            val2 = a
+            val1 = b
+
+        return self.__lcg.get_number([val1, val2], inclusive=True)
+    
     
     def __reseed(self) -> None:
         seeder_seed: int = self.__seeder.seed.int
