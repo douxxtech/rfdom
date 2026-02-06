@@ -5,6 +5,43 @@ import hashlib
 import math
 import threading
 
+class Seed:
+    """A cryptographic seed with precomputed conversions accessible as attributes."""
+    
+    def __init__(self, hex_value: str):
+        self.__hex = hex_value
+        self.__int = int(hex_value, 16)
+        self.__bytes = bytes.fromhex(hex_value)
+        self.__binary = bin(self.__int)[2:].zfill(256) # 256 bits for SHA-256
+    
+    def __str__(self) -> str:
+        """Return the hex representation when converted to string."""
+        return self.__hex
+    
+    def __repr__(self) -> str:
+        return f"Seed('{self.__hex}')"
+    
+    @property
+    def hex(self) -> str:
+        """Get the seed as a hexadecimal string."""
+        return self.__hex
+    
+    @property
+    def int(self) -> int:
+        """Get the seed as an integer."""
+        return self.__int
+    
+    @property
+    def bytes(self) -> bytes:
+        """Get the seed as bytes."""
+        return self.__bytes
+    
+    @property
+    def binary(self) -> str:
+        """Get the seed as a binary string."""
+        return self.__binary
+    
+
 class Seeder:
     """
     Generate cryptographic seeds from radio frequency noise using an RTL-SDR device.
@@ -34,7 +71,7 @@ class Seeder:
         """
         
         self.running: bool = False
-        self.__seed: Optional[str] = None
+        self.__seed: Optional[Seed] = None
         self.__client: RTLTCPClient = rtl_tcp_client
         self.__gain: float = 49.6 # max rtlsdr value
         self.__freq_range: List[int] = [110, 120] # [min_freq, max_freq]
@@ -59,14 +96,14 @@ class Seeder:
 
 
     @property
-    def seed(self) -> Optional[str]:
+    def seed(self) -> Optional[Seed]:
         """
         Get the current cryptographic seed.
         
         Returns:
-            str: A SHA-256 hash hexdigest representing the current seed derived from RF samples.
+            Seed: A Seed object with conversion methods, or None if not available.
         """
-
+            
         return self.__seed
     
 
@@ -100,7 +137,7 @@ class Seeder:
         return self.__current_freq
 
 
-    def __samples_to_seed(self, samples: Optional[List[complex]]) -> Optional[str]:
+    def __samples_to_seed(self, samples: Optional[List[complex]]) -> Optional[Seed]:
         """
         Convert IQ samples to a cryptographic seed using phase angle analysis.
         
@@ -114,7 +151,7 @@ class Seeder:
             samples: A list of complex IQ samples from the RTL-SDR, or None.
         
         Returns:
-            str or None: A SHA-256 hash hexdigest if successful, the previous seed if samples
+            Seed or None: A Seed object if successful, the previous seed if samples
                         are None, or None if the seeder is not running.
         """
 
@@ -180,7 +217,7 @@ class Seeder:
 
             byte_array = bytes(byte_array)
 
-            return hashlib.sha256(byte_array).hexdigest()
+            return Seed(hashlib.sha256(byte_array).hexdigest())
         
         except:
             return self.__seed
