@@ -56,7 +56,7 @@ class Seeder:
     """
 
 class Seeder:
-    def __init__(self, rtl_tcp_client: "RTLTCPClient", gain: float = 49.6, freq_range: List[int] = [110, 120], samples_count: int = 1024, refresh_rate: int = 5000):
+    def __init__(self, rtl_tcp_client: RTLTCPClient, gain: float = 49.6, freq_range: List[int] = [110, 120], samples_count: int = 1024, refresh_rate: int = 5000):
         """
         Initialize the Seeder with an RTL-TCP client connection.
 
@@ -76,10 +76,10 @@ class Seeder:
         """
         
         self.running: bool = False
-        self.__seed: Optional["Seed"] = None
+        self.__seed: Optional[Seed] = None
 
         # Configurable parameters
-        self.__client: "RTLTCPClient" = rtl_tcp_client
+        self.__client: RTLTCPClient = rtl_tcp_client
         self.__gain: float = gain
         self.__freq_range: List[int] = freq_range
         self.__current_freq: int = freq_range[0]
