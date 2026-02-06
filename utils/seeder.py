@@ -232,14 +232,17 @@ class Seeder:
         """
 
         while self.running:
-            
-            self.__client.configure(freq_mhz=self.__get_next_freq(), gain_db=self.__gain) # configure with the shift
+            start_time: float = time.time()  # mark the start of the iteration
 
-            samples: Optional[List[int]] = self.__client.read_samples(self.__samples_count) # read samples
+            self.__client.configure(freq_mhz=self.__get_next_freq(), gain_db=self.__gain)  # configure with the shift
 
-            if samples is None:
-                time.sleep(self.__refresh_rate / 1000)
-                continue
+            samples: Optional[List[int]] = self.__client.read_samples(self.__samples_count)  # read samples
 
-            self.__seed = self.__samples_to_seed(samples)
-            time.sleep(self.__refresh_rate / 1000)
+            if samples is not None:
+                self.__seed = self.__samples_to_seed(samples)
+
+            end_time: float = time.time()
+            elapsed_ms: float = (end_time - start_time) * 1000 # to ms
+
+            sleep_time_ms: float = max(0, self.__refresh_rate - elapsed_ms)
+            time.sleep(sleep_time_ms / 1000)
