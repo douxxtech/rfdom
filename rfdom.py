@@ -1,4 +1,4 @@
-from typing import List, Optional, overload, Sequence
+from typing import List, Optional, overload, Sequence, MutableSequence
 from utils.rtltcpclient import RTLTCPClient
 from utils.seeder import Seeder
 from utils.LCG import LCGPseudoRandomGenerator
@@ -185,6 +185,12 @@ class RFDom:
 
         chosen_indices.sort()
         return [population[i] for i in chosen_indices]
+
+    def shuffle(self, x: MutableSequence):
+        n = len(x)
+        for i in range(n):
+            j = self.randint(i, n - 1)
+            x[i], x[j] = x[j], x[i]
 
 
     def __reseed(self) -> None:
