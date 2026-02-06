@@ -74,16 +74,6 @@ class RFDom:
 
         return self.__lcg.get_number([val1, val2], inclusive=True)
     
-
-    @overload
-    def randrange(stop: int, /) -> int: ...
-
-    @overload
-    def randrange(start: int, stop: int, /) -> int: ...
-
-    @overload
-    def randrange(start: int, stop: int, step: int, /) -> int: ...
-
     def randrange(self, start: int, stop: int = None, step: int = 1):
         if step == 0:
             raise ValueError("step argument must not be zero")
