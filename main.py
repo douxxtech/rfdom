@@ -11,7 +11,7 @@ lcg = LCGPseudoRandomGenerator(a=1103515245, c=12345, m=2**31, seed=last_seed) #
 
 try:
     while True:
-        print(lcg.get_number([0, 10]))
+        print(lcg.get_float())
         
         current_seed = seeder.seed.int
         if current_seed != last_seed:

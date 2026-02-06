@@ -32,6 +32,7 @@ class LCGPseudoRandomGenerator:
             - glibc: a=1103515245, c=12345, m=2^31
             - Numerical Recipes: a=1664525, c=1013904223, m=2^32
         """
+        
         self.a: int = a
         self.c: int = c
         self.m: int = m
@@ -54,12 +55,29 @@ class LCGPseudoRandomGenerator:
                 returns a value in [min, max). If None, returns a value
                 in [0, m).
         """
+
         self.x_prev: int = (self.a * self.x_prev + self.c) % self.m
         
         if num_range is None:
             return self.x_prev
         else: 
             return int((self.x_prev / (self.m - 1)) * (num_range[1] - num_range[0]))
+        
+
+    def get_float(self) -> float:
+        """
+        Generate the next pseudo-random float in the range [0.0, 1.0).
+        
+        Advances the internal state and returns a normalized floating-point
+        value by dividing the raw output by the modulus.
+        
+        Returns:
+            float: A pseudo-random float in the range [0.0, 1.0) (inclusive
+                of 0.0, exclusive of 1.0).
+        """
+
+        self.x_prev: int = (self.a * self.x_prev + self.c) % self.m
+        return self.x_prev / self.m
         
     def reseed(self, new_seed: int) -> None:
         """
@@ -76,5 +94,6 @@ class LCGPseudoRandomGenerator:
             After reseeding, the sequence will be deterministic based on the
             new seed until the next reseed operation.
         """
+
         self.x0 = new_seed
         self.x_prev = (self.a * self.x0 + self.c) % self.m
