@@ -40,6 +40,9 @@ class Seeder:
     def seed(self):
         return self.__seed
     
+    def stop(self):
+        self.running = False
+        self.__client.disconnect()
 
     def __get_next_freq(self) -> int:
         self.__current_freq += 1
