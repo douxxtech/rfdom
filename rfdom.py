@@ -2,6 +2,7 @@ from typing import List, Optional, overload, Sequence, MutableSequence
 from utils.rtltcpclient import RTLTCPClient
 from utils.seeder import Seeder
 from utils.LCG import LCGPseudoRandomGenerator
+import math
 
 class RFDom:
     """
@@ -192,6 +193,14 @@ class RFDom:
             j = self.randint(i, n - 1)
             x[i], x[j] = x[j], x[i]
 
+
+    def gauss(self, mu: float, sigma: float) -> float:
+        u1 = self.random()
+        u2 = self.random()
+
+        z = math.sqrt(-2 * math.log(u1)) * math.cos(2 * math.pi * u2)
+        
+        return mu + sigma * z
 
     def __reseed(self) -> None:
         seeder_seed: int = self.__seeder.seed.int
