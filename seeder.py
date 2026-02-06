@@ -59,7 +59,7 @@ class Seeder:
 
 
     @property
-    def seed(self):
+    def seed(self) -> Optional[str]:
         """
         Get the current cryptographic seed.
         
@@ -70,7 +70,7 @@ class Seeder:
         return self.__seed
     
 
-    def stop(self):
+    def stop(self) -> None:
         """
         Stop the seeder and disconnect from the RTL-TCP server.
         
@@ -100,7 +100,7 @@ class Seeder:
         return self.__current_freq
 
 
-    def __samples_to_seed(self, samples: Optional[List[complex]]):
+    def __samples_to_seed(self, samples: Optional[List[complex]]) -> Optional[str]:
         """
         Convert IQ samples to a cryptographic seed using phase angle analysis.
         
@@ -186,7 +186,7 @@ class Seeder:
             return self.__seed
 
 
-    def __runner(self):
+    def __runner(self) -> None:
         """
         Background thread worker for continuous seed generation.
         
