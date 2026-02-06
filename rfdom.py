@@ -195,6 +195,9 @@ class RFDom:
 
 
     def gauss(self, mu: float, sigma: float) -> float:
+        if sigma < 1:
+            raise ValueError("sigma must be 1 or superior")
+
         u1 = self.random()
         u2 = self.random()
 
