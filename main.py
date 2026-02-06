@@ -1,5 +1,5 @@
-from rtltcpclient import RTLTCPClient
-from seeder import Seeder
+from utils.rtltcpclient import RTLTCPClient
+from utils.seeder import Seeder
 import time
 
 client = RTLTCPClient('192.168.1.185')

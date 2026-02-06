@@ -1,4 +1,4 @@
-from rtltcpclient import RTLTCPClient
+from .rtltcpclient import RTLTCPClient
 from typing import Optional, List
 import time
 import hashlib
