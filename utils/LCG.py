@@ -39,7 +39,7 @@ class LCGPseudoRandomGenerator:
         self.x0: int = seed
         self.x_prev: int = (self.a * self.x0 + self.c) % self.m
     
-    def get_number(self, num_range=None) -> int:
+    def get_number(self, num_range=None, inclusive: bool = False) -> int:
         """
         Generate the next pseudo-random number in the sequence.
         
@@ -49,10 +49,12 @@ class LCGPseudoRandomGenerator:
         Args:
             num_range (tuple[int, int], optional): A tuple (min, max) defining
                 the output range. If None, returns the raw generated value.
+            inclusive (bool): If True, the upper bound is inclusive [min, max].
+                            If False (default), upper bound is exclusive [min, max).
         
         Returns:
             int: The next pseudo-random number. If num_range is provided,
-                returns a value in [min, max). If None, returns a value
+                returns a value in the specified range. If None, returns a value
                 in [0, m).
         """
 
@@ -60,24 +62,36 @@ class LCGPseudoRandomGenerator:
         
         if num_range is None:
             return self.x_prev
-        else: 
-            return int((self.x_prev / (self.m - 1)) * (num_range[1] - num_range[0]))
+        else:
+            if inclusive:
+                # [min, max] = (max - min + 1) possible values
+                return num_range[0] + int((self.x_prev / self.m) * (num_range[1] - num_range[0] + 1))
+            else:
+                # [min, max) = (max - min) possible values
+                return num_range[0] + int((self.x_prev / self.m) * (num_range[1] - num_range[0]))
         
 
-    def get_float(self) -> float:
+    def get_float(self, inclusive: bool = False) -> float:
         """
-        Generate the next pseudo-random float in the range [0.0, 1.0).
+        Generate the next pseudo-random float.
         
         Advances the internal state and returns a normalized floating-point
-        value by dividing the raw output by the modulus.
+        value.
+        
+        Args:
+            inclusive (bool): If True, returns range [0.0, 1.0] (both bounds inclusive).
+                            If False (default), returns range [0.0, 1.0) (upper bound exclusive).
         
         Returns:
-            float: A pseudo-random float in the range [0.0, 1.0) (inclusive
-                of 0.0, exclusive of 1.0).
+            float: A pseudo-random float in the specified range.
         """
 
         self.x_prev: int = (self.a * self.x_prev + self.c) % self.m
-        return self.x_prev / self.m
+        
+        if inclusive:
+            return self.x_prev / (self.m - 1)
+        else:
+            return self.x_prev / self.m
         
     def reseed(self, new_seed: int) -> None:
         """
