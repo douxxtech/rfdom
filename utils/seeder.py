@@ -55,29 +55,37 @@ class Seeder:
         seed: The current SHA-256 seed derived from RF samples (read-only property).
     """
 
-    def __init__(self, rtl_tcp_client: RTLTCPClient):
+class Seeder:
+    def __init__(self, rtl_tcp_client: "RTLTCPClient", gain: float = 49.6, freq_range: List[int] = [110, 120], samples_count: int = 1024, refresh_rate: int = 5000):
         """
         Initialize the Seeder with an RTL-TCP client connection.
-        
+
         Sets up the seeder to generate cryptographic seeds from radio frequency samples.
         Configures the RTL-SDR device, retrieves initial samples, and starts a background
         thread for continuous seed refreshing.
-        
+
         Args:
             rtl_tcp_client: An RTLTCPClient instance for communicating with the RTL-TCP server.
-        
+            gain: RTL-SDR gain value (default 49.6).
+            freq_range: Frequency range to sample [min_freq, max_freq] (default [110, 120]).
+            samples_count: Number of samples to read per fetch (default 1024).
+            refresh_rate: Seed refresh rate in milliseconds (default 5000).
+
         Raises:
             ValueError: If connection to the RTL-TCP server fails or initial samples cannot be retrieved.
         """
         
         self.running: bool = False
-        self.__seed: Optional[Seed] = None
-        self.__client: RTLTCPClient = rtl_tcp_client
-        self.__gain: float = 49.6 # max rtlsdr value
-        self.__freq_range: List[int] = [110, 120] # [min_freq, max_freq]
-        self.__current_freq: int = self.__freq_range[0]
-        self.__samples_count: int = 1024 # we're reading 1024000 samples / s, so this will take ~1ms to retrieve them
-        self.__refresh_rate: int = 5000
+        self.__seed: Optional["Seed"] = None
+
+        # Configurable parameters
+        self.__client: "RTLTCPClient" = rtl_tcp_client
+        self.__gain: float = gain
+        self.__freq_range: List[int] = freq_range
+        self.__current_freq: int = freq_range[0]
+        self.__samples_count: int = samples_count
+        self.__refresh_rate: int = refresh_rate
+
         self.__thread = threading.Thread(target=self.__runner, daemon=True)
         
         if not self.__client.connect():
