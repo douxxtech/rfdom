@@ -1,4 +1,4 @@
-from typing import List, Optional, overload
+from typing import List, Optional, overload, Sequence
 from utils.rtltcpclient import RTLTCPClient
 from utils.seeder import Seeder
 from utils.LCG import LCGPseudoRandomGenerator
@@ -107,6 +107,15 @@ class RFDom:
             raise ValueError("empty range for randrange()")
         
         return start + step * self.randint(0, n - 1)
+    
+
+    def choice(self, seq: Sequence[type]) -> type:
+        length = len(seq)
+        
+        if length == 0:
+            raise ValueError("cannot choose from an empty sequence")
+
+        return seq[self.randint(0, length - 1)]
 
 
     def __reseed(self) -> None:
