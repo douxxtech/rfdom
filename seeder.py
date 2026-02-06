@@ -40,9 +40,11 @@ class Seeder:
     def seed(self):
         return self.__seed
     
+
     def stop(self):
         self.running = False
         self.__client.disconnect()
+
 
     def __get_next_freq(self) -> int:
         self.__current_freq += 1
@@ -51,6 +53,7 @@ class Seeder:
         if self.__current_freq > self.__freq_range[1]:
             self.__current_freq = self.__freq_range[0]
         return self.__current_freq
+
 
     def __samples_to_seed(self, samples: Optional[List[complex]]):
         if not self.running: 
@@ -119,6 +122,7 @@ class Seeder:
         
         except:
             return self.__seed
+
 
     def __runner(self):
         while self.running:
