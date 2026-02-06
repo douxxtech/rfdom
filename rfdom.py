@@ -118,6 +118,48 @@ class RFDom:
         return seq[self.randint(0, length - 1)]
 
 
+    def choices(self, population: Sequence[type], weights: Optional[Sequence[type]] = None, cum_weights: Optional[Sequence[float]] | None = None, k: int = 1):
+        pop_length = len(population)
+
+        if pop_length == 0:
+            raise ValueError("cannot choose from an empty sequence")
+        
+        if k < 1:
+            raise ValueError("k must be at least 1")
+        
+        elements: Sequence[type] = []
+
+        if weights is None and cum_weights is None:
+            for _ in range(k):
+                elements.append(population[self.randint(0, pop_length - 1)])
+            
+            return elements
+
+        # process cumulative weights if not already given
+        if cum_weights is None:
+                    
+            if pop_length != len(weights):
+                raise ValueError("one weight per population element is required")
+            
+            cum_weights = []
+            total = 0
+
+            for w in weights:
+                total += w
+                cum_weights.append(total) # If given [1, 3, 2, 4], cum_weights will contain [1, 4, 6, 10]
+
+        else:
+
+            if pop_length != len(cum_weights):
+                raise ValueError("one weight per population element is required")
+            
+        for _ in range(k):
+            random = self.uniform(0, cum_weights[-1])
+            index = next(i for i, cw in enumerate(cum_weights) if random < cw)
+            elements.append(population[index])
+
+        return elements
+
     def __reseed(self) -> None:
         seeder_seed: int = self.__seeder.seed.int
 
