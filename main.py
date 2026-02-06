@@ -7,5 +7,9 @@ client = RTLTCPClient('192.168.1.185')
 seeder = Seeder(client)
 
 while True:
-    print(seeder.seed)
-    time.sleep(5)
+    try:
+        print(seeder.seed)
+        time.sleep(5)
+    except KeyboardInterrupt:
+        seeder.stop()
+        break
