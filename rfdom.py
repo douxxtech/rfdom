@@ -108,7 +108,7 @@ class RFDom:
         return seq[self.randint(0, length - 1)]
 
 
-    def choices(self, population: Sequence[type], weights: Optional[Sequence[type]] = None, cum_weights: Optional[Sequence[float]] | None = None, k: int = 1):
+    def choices(self, population: Sequence[type], weights: Optional[Sequence[type]] = None, cum_weights: Optional[Sequence[float]] | None = None, k: int = 1) -> List[type]:
         pop_length = len(population)
 
         if pop_length == 0:
@@ -149,6 +149,43 @@ class RFDom:
             elements.append(population[index])
 
         return elements
+    
+
+    def sample(self, population: Sequence[type], k: int, counts: Optional[Sequence[int]] = None) -> List[type]:
+        pop_length = len(population)
+
+        if counts is not None:
+            if len(counts) != pop_length:
+                raise ValueError("one count per population element is required")
+            
+            if any(count < 0 for count in counts):
+                raise ValueError("counts must be non-negative")
+            
+            weights = list(counts)
+
+        else:
+            weights = [1] * pop_length
+
+        if k > pop_length:
+            raise ValueError("k cannot be bigger than population")
+
+        chosen_indices = []
+
+        for _ in range(k):
+            total_weight = sum(weights)
+            random = self.randint(1, total_weight)
+
+            acc = 0
+            for i, w in enumerate(weights):
+                acc += w
+                if acc >= random:
+                    chosen_indices.append(i)
+                    weights[i] = 0
+                    break
+
+        chosen_indices.sort()
+        return [population[i] for i in chosen_indices]
+
 
     def __reseed(self) -> None:
         seeder_seed: int = self.__seeder.seed.int
