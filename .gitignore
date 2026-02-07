@@ -1,12 +1,22 @@
+# exclude everything
 *
 
+# include:
+
+#basic files
 !/.gitignore
 !/LICENSE
 !/**.md
 
+# python files
 !/**/**.py
 
+# project folders
 !/rfdom/
 !/rfdom/**/
-
 !/examples/
+
+# package configuration
+!/setup.py
+!/setup.cfg
+!/pyproject.toml
