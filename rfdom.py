@@ -87,6 +87,15 @@ class RFDom:
             raise
 
 
+    def __del__(self) -> None:
+        """
+        Cleanup method called when RFDom instance is garbage collected.
+        
+        Stops the background seeder thread to ensure clean shutdown.
+        """
+        if hasattr(self, '_RFDom__seeder'):
+            self.__seeder.stop()
+
     def random(self) -> float:
         """
         Generate a random float in the range [0.0, 1.0).
