@@ -21,7 +21,7 @@ pip install rfdom
 Or from source:
 
 ```bash
-git clone https://github.com/douxxtech/rfdom.
+git clone https://github.com/douxxtech/rfdom.git
 cd rfdom
 pip install -e .
 ```
