@@ -1,7 +1,7 @@
 from rfdom import RFDom
 import time
 
-random = RFDom(host="192.168.1.185")
+random = RFDom()
 i = 0
 
 try:
