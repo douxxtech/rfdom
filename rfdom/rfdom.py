@@ -1,8 +1,9 @@
-from typing import List, Optional, overload, Sequence, MutableSequence
-from utils.rtltcpclient import RTLTCPClient
-from utils.seeder import Seeder
-from utils.LCG import LCGPseudoRandomGenerator
 import math
+from typing import List, Optional, overload, Sequence, MutableSequence
+
+from .utils.LCG import LCGPseudoRandomGenerator
+from .utils.rtltcpclient import RTLTCPClient
+from .utils.seeder import Seeder
 
 class RFDom:
     """

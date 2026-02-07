@@ -5,10 +5,9 @@ A *really* simple rtl-tcp client, that manages basic operations and configuratio
 Gist: https://gist.github.com/douxxtech/793fe37022d9551df3114f6d72498b94
 """
 
+import numpy as np
 import socket
 import struct
-import numpy as np
-
 
 class RTLTCPClient:
     """Simple RTL-TCP client for receiving IQ samples"""

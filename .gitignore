@@ -1,7 +1,12 @@
 *
 
 !/.gitignore
+!/LICENSE
+!/**.md
 
 !/**/**.py
 
-!/utils/
+!/rfdom/
+!/rfdom/**/
+
+!/examples/
