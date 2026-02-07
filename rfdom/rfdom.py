@@ -340,7 +340,7 @@ class RFDom:
         chosen_indices.sort()
         return [population[i] for i in chosen_indices]
 
-    def shuffle(self, x: MutableSequence):
+    def shuffle(self, x: MutableSequence) -> None:
         """
         Shuffle a mutable sequence in-place using Fisher-Yates algorithm.
         
