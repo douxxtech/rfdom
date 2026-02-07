@@ -204,6 +204,14 @@ class RFDom:
         z = math.sqrt(-2 * math.log(u1)) * math.cos(2 * math.pi * u2)
         
         return mu + sigma * z
+    
+    def expovariate(self, lambd: float) -> float:
+        if lambd <= 0:
+            raise ValueError("lambda must be > 0")
+        
+        u = self.random()
+        
+        return -math.log(u) / lambd
 
     def __reseed(self) -> None:
         seeder_seed: int = self.__seeder.seed.int
