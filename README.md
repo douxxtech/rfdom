@@ -2,6 +2,8 @@
 
 Hardware random number generator using radio frequency noise from RTL-SDR devices.
 
+[Blog article here](https://douxx.blog/?p=8-how-i-built-a-random-number-generator-sort-of)
+
 ## Overview
 
 RFDom provides a drop-in replacement for Python's `random` module that generates cryptographically strong random numbers from atmospheric radio noise. It uses an RTL-SDR device to capture IQ samples, converts them to seeds via phase angle analysis and SHA-256 hashing, and feeds these into an LCG for deterministic random number generation.
