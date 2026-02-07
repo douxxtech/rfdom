@@ -331,7 +331,7 @@ class RFDom:
             acc = 0
             for i, w in enumerate(weights):
                 acc += w
-                if acc >= random:
+                if acc > random:
                     chosen_indices.append(i)
                     weights[i] = 0
                     break
