@@ -149,6 +149,16 @@ class RFDom:
 
         return self.__lcg.get_number([val1, val2], inclusive=True)
     
+    
+    @overload
+    def randrange(self, stop: int) -> int: ...
+
+    @overload
+    def randrange(self, start: int, stop: int) -> int: ...
+
+    @overload
+    def randrange(self, start: int, stop: int, step: int) -> int: ...
+    
     def randrange(self, start: int, stop: int = None, step: int = 1):
         """
         Generate a random integer from range(start, stop, step).
@@ -388,13 +398,3 @@ class RFDom:
         if self.__last_seed != seeder_seed:
             self.__last_seed = seeder_seed
             self.__lcg.reseed(seeder_seed)
-
-
-    @overload
-    def randrange(self, stop: int) -> int: ...
-
-    @overload
-    def randrange(self, start: int, stop: int) -> int: ...
-
-    @overload
-    def randrange(self, start: int, stop: int, step: int) -> int: ...
