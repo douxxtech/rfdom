@@ -211,7 +211,7 @@ class RFDom:
         return seq[self.randint(0, length - 1)]
 
 
-    def choices(self, population: Sequence[type], weights: Optional[Sequence[type]] = None, cum_weights: Optional[Sequence[float]] | None = None, k: int = 1) -> List[type]:
+    def choices(self, population: Sequence[type], weights: Optional[Sequence[float]] = None, cum_weights: Optional[Sequence[float]] | None = None, k: int = 1) -> List[type]:
         """
         Choose k elements from population with replacement, optionally weighted.
         
@@ -307,7 +307,7 @@ class RFDom:
 
         for _ in range(k):
             total_weight = sum(weights)
-            random = self.randint(1, total_weight)
+            random = self.randint(0, total_weight - 1)
 
             acc = 0
             for i, w in enumerate(weights):
