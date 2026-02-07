@@ -182,7 +182,7 @@ class Seeder:
                 current_angle: float = math.atan2(current.imag, current.real)
                 previous_angle: float = math.atan2(previous.imag, previous.real)
 
-                delta: float = (current_angle - previous_angle + math.pi) % 2 * math.pi - math.pi
+                delta: float = (current_angle - previous_angle + math.pi) % (2 * math.pi) - math.pi
 
                 bits.append(1 if delta > 0 else 0)
 
