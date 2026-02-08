@@ -152,7 +152,7 @@ class RTLTCPClient:
 # Usage example, change to True or remove the if to use it
 if False:
     # Create client
-    rtl = RTLTCPClient('192.168.1.185', 1234)
+    rtl = RTLTCPClient('localhost', 1234)
     
     # Connect
     if rtl.connect():
