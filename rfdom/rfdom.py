@@ -71,7 +71,7 @@ class RFDom:
                 client,
                 gain if gain is not None else 49.6,
                 freq_range if freq_range is not None else [110, 120],
-                num_samples if num_samples is not None else 120,
+                num_samples if num_samples is not None else 1024,
                 refresh_rate if refresh_rate is not None else 5000,
             )
 
