@@ -2,7 +2,7 @@
 
 Hardware random number generator using radio frequency noise from RTL-SDR devices.
 
-[Blog article here](https://douxx.blog/?p=8-how-i-built-a-random-number-generator-sort-of)
+[Blog article here](https://douxx.blog/how-i-built-a-random-number-generator-sort-of)
 
 ## Overview
 
